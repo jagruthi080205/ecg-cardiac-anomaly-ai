@@ -1,13 +1,20 @@
 # 🫀 CardioVision AI: Real-Time ECG Arrhythmia Diagnostics & Explainable Waveform Attention
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ecg-cardiac-anomaly-ai-g7pnvgbgpdwjba4cyzpvy.streamlit.app)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![PhysioNet MIT-BIH](https://img.shields.io/badge/Dataset-PhysioNet_MIT--BIH-008080?style=for-the-badge)](https://physionet.org/content/mitdb/)
 [![Standard](https://img.shields.io/badge/Clinical_Standard-AAMI_EC57-E91E63?style=for-the-badge)](https://www.aami.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-Telemetry_App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![License](https://img.shields.io/badge/License-MIT-00FFAA?style=for-the-badge)](LICENSE)
 
 > **An end-to-end clinical Deep Learning system that unifies 1D-CNN (morphology extraction), Bidirectional LSTM (recurrent sequence modeling), and Temporal Self-Attention (explainability) to classify cardiac arrhythmias under the international AAMI EC57 standard at sub-10ms real-time latency.**
+
+---
+
+### 🌐 Live Interactive Cloud Demo
+> **Launch the deployed clinical telemetry application online:**  
+> 👉 **[https://ecg-cardiac-anomaly-ai-g7pnvgbgpdwjba4cyzpvy.streamlit.app](https://ecg-cardiac-anomaly-ai-g7pnvgbgpdwjba4cyzpvy.streamlit.app)**  
+> *(Test live cardiac arrhythmias, scrub individual heartbeats, and inspect explainable attention heatmaps)*
 
 ---
 
