@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints
+data/raw/*.dat
+data/raw/*.hea
+data/raw/*.atr
+data/processed/*.npz
+.pytest_cache/
+.streamlit/
