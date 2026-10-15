@@ -58,19 +58,27 @@ def z_score_normalize(beat: np.ndarray, eps: float = 1e-8) -> np.ndarray:
     return ((beat - mean) / (std + eps)).astype(np.float32)
 
 
-def generate_physiologic_synthetic_ecg(num_beats: int = 500, fs: int = SAMPLING_RATE) -> Tuple[np.ndarray, np.ndarray]:
+def generate_physiologic_synthetic_ecg(num_beats: int = 500, 
+                                       fs: int = SAMPLING_RATE,
+                                       target_class: Optional[int] = None,
+                                       **kwargs) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generates synthetic, mathematically authentic ECG waveforms based on Gaussian wave synthesis
     for P, Q, R, S, and T waves when offline or for fast unit testing.
     Produces authentic AAMI classes: Normal (N), Supraventricular (S), and Ventricular (V / PVC).
     """
+    if target_class is None and "target_class" in kwargs:
+        target_class = kwargs["target_class"]
     np.random.seed(42)
     beats = []
     labels = []
     t = np.linspace(-0.25, 0.46, BEAT_WINDOW_LENGTH)  # 256 samples window
 
     for _ in range(num_beats):
-        choice = np.random.choice([0, 1, 2], p=[0.70, 0.15, 0.15])
+        if target_class is not None:
+            choice = target_class
+        else:
+            choice = np.random.choice([0, 1, 2], p=[0.70, 0.15, 0.15])
         
         if choice == 0:
             # Normal Beat (N): Narrow QRS, upright P and T wave

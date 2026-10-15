@@ -113,6 +113,19 @@ def get_cached_model():
     return load_trained_model(CHECKPOINT_PATH)
 
 
+def synthesize_beat_scenario(target_class: int, num_beats: int = 60):
+    """Safely produces pure beats for the target class with automatic fallback."""
+    try:
+        return generate_physiologic_synthetic_ecg(num_beats=num_beats, target_class=target_class)
+    except TypeError:
+        # Fallback for cached module: generate diverse pool and filter matching class
+        raw_beats, raw_labels = generate_physiologic_synthetic_ecg(num_beats=num_beats * 4)
+        match_idx = np.where(raw_labels == target_class)[0]
+        if len(match_idx) >= num_beats:
+            return raw_beats[match_idx[:num_beats]], raw_labels[match_idx[:num_beats]]
+        return raw_beats[:num_beats], raw_labels[:num_beats]
+
+
 @st.cache_data
 def get_or_create_patient_data(scenario: str):
     """Retrieves patient record or generates clinically authentic cardiac simulation."""
@@ -122,7 +135,6 @@ def get_or_create_patient_data(scenario: str):
             download_mitbih_record(rec_id)
             beats, labels, r_peaks = load_and_segment_record(rec_id)
             if len(beats) > 0:
-                # Synthesize a continuous strip around the first 10 beats for display
                 continuous_signal = butter_bandpass_filter(np.concatenate(beats[:12]))
                 return beats, labels, r_peaks[:12], continuous_signal
         except Exception:
@@ -130,15 +142,11 @@ def get_or_create_patient_data(scenario: str):
 
     # High-fidelity synthetic presets based on AAMI standard
     if "Ventricular Ectopic" in scenario:
-        beats, labels = generate_physiologic_synthetic_ecg(num_beats=60)
-        # Force high occurrence of PVCs
-        labels[::3] = 2
+        beats, labels = synthesize_beat_scenario(target_class=2, num_beats=60)
     elif "Supraventricular" in scenario:
-        beats, labels = generate_physiologic_synthetic_ecg(num_beats=60)
-        labels[::4] = 1
-    else:  # Normal Sinus
-        beats, labels = generate_physiologic_synthetic_ecg(num_beats=60)
-        labels[:] = 0
+        beats, labels = synthesize_beat_scenario(target_class=1, num_beats=60)
+    else:  # Normal Sinus Rhythm
+        beats, labels = synthesize_beat_scenario(target_class=0, num_beats=60)
 
     # Build continuous signal simulation
     continuous_signal = np.concatenate(beats[:10])
